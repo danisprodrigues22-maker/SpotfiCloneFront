@@ -4,11 +4,12 @@ import api from "../services/api";
 import { AuthContext } from "../contexts/AuthContext";
 
 export default function Register() {
+  const { login } = useContext(AuthContext);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
-  const { login } = useContext(AuthContext);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -17,11 +18,35 @@ export default function Register() {
     try {
       console.log("REGISTER ENVIANDO:", { name, email, password });
 
-      await api.post("/auth/register", { name, email, password });
+      // 1️⃣ cria usuário
+      await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
 
-      console.log("REGISTER OK - fazendo login automático");
+      console.log("USUÁRIO CRIADO, FAZENDO LOGIN...");
 
-      await login(email, password);
+      // 2️⃣ login real
+      const response = await api.post("/auth/login", {
+        email,
+        password,
+      });
+
+      console.log("LOGIN RESPONSE:", response.data);
+
+      // ⚠️ IMPORTANTE: vamos pegar exatamente o que vem
+      const user = response.data.user;
+      const token = response.data.token;
+
+      if (!user || !token) {
+        console.error("USER OU TOKEN NÃO VEIO:", response.data);
+        setMsg("Erro interno ao logar automaticamente.");
+        return;
+      }
+
+      // 3️⃣ salva sessão
+      login(user, token);
 
     } catch (err) {
       console.error("ERRO REGISTER:", err.response?.data || err.message);
@@ -45,7 +70,7 @@ export default function Register() {
         <input
           placeholder="Nome"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           style={{ width: "100%", marginBottom: ".8rem", padding: ".6rem" }}
         />
 
@@ -53,7 +78,7 @@ export default function Register() {
           type="email"
           placeholder="Email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           style={{ width: "100%", marginBottom: ".8rem", padding: ".6rem" }}
         />
 
@@ -61,13 +86,17 @@ export default function Register() {
           type="password"
           placeholder="Senha"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           style={{ width: "100%", marginBottom: "1rem", padding: ".6rem" }}
         />
 
         <button type="submit">Criar conta</button>
 
-        {msg && <p style={{ marginTop: "1rem", color: "red" }}>{msg}</p>}
+        {msg && (
+          <p style={{ marginTop: "1rem", color: "red" }}>
+            {msg}
+          </p>
+        )}
       </form>
     </AuthLayout>
   );

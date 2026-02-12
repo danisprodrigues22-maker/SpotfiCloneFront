@@ -1,57 +1,41 @@
-import React, { createContext, useState, useEffect } from "react";
-import api from "../services/api";
+import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userRaw = localStorage.getItem("user");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // 🔥 novo estado
 
-    if (token && userRaw) {
-      setUser(JSON.parse(userRaw));
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+
+    if (storedUser && token) {
+      setUser(JSON.parse(storedUser));
     }
+
+    setLoading(false); // 🔥 terminou de verificar sessão
   }, []);
 
-  const login = async (email, password) => {
-    try {
-      console.log("LOGIN ENVIANDO:", { email, password });
+  function login(userData, token) {
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", token);
+    setUser(userData);
+    navigate("/app");
+  }
 
-      const res = await api.post("/auth/login", { email, password });
-
-      console.log("LOGIN RESPOSTA:", res.data);
-
-      const { token, user } = res.data;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-      setUser(user);
-
-      navigate("/app");
-    } catch (err) {
-      console.error("ERRO LOGIN:", err.response?.data || err.message);
-      throw err;
-    }
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
+  function logout() {
     localStorage.removeItem("user");
-    delete api.defaults.headers.common["Authorization"];
+    localStorage.removeItem("token");
     setUser(null);
-    navigate("/auth");
-  };
+    navigate("/login");
+  }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

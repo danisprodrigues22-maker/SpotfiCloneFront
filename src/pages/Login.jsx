@@ -1,32 +1,49 @@
-// src/pages/Login.jsx
 import { useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import AuthLayout from "../layout/AuthLayout";
+import api from "../services/api";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [msg, setMsg] = useState("");
   const { login } = useContext(AuthContext);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
+
     try {
-      await login(email, senha);
+      const response = await api.post("/auth/login", {
+        email,
+        password,
+      });
+
+      const { user, token } = response.data;
+
+      login(user, token); // 🔥 ESSA LINHA É ESSENCIAL
     } catch (err) {
-      setMsg(err.response?.data?.message || "Erro ao logar");
+      console.error("Erro no login", err);
     }
   }
 
   return (
-    <AuthLayout>
-      <form onSubmit={handleSubmit} style={{ background: "#fff", padding: "2rem", borderRadius: 8, minWidth: 300 }}>
-        <h2>Login</h2>
-        <input placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} style={{ width: "100%", marginBottom: ".8rem", padding: ".6rem" }} />
-        <input type="password" placeholder="Senha" value={senha} onChange={(e)=>setSenha(e.target.value)} style={{ width: "100%", marginBottom: "1rem", padding: ".6rem" }} />
-        <button type="submit">Entrar</button>
-        {msg && <p style={{ marginTop: "1rem" }}>{msg}</p>}
-      </form>
-    </AuthLayout>
+    <form onSubmit={handleSubmit}>
+      <h1>Login</h1>
+
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+
+      <input
+        type="password"
+        placeholder="Senha"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      <button type="submit">Entrar</button>
+    </form>
   );
 }
