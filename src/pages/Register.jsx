@@ -1,9 +1,11 @@
 import { useState, useContext } from "react";
-import AuthLayout from "../layout/AuthLayout";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
 import { AuthContext } from "../contexts/AuthContext";
+import AuthLayout from "../layout/AuthLayout";
 
 export default function Register() {
+  const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
   const [name, setName] = useState("");
@@ -16,70 +18,60 @@ export default function Register() {
     setMsg("");
 
     try {
-      console.log("REGISTER ENVIANDO:", { name, email, password });
+      // cria conta
+      await api.post("/auth/register", { name, email, password });
 
-      // 1️⃣ cria usuário
-      await api.post("/auth/register", {
-        name,
-        email,
-        password,
-      });
+      // loga automaticamente
+      await login(email, password);
 
-      console.log("USUÁRIO CRIADO, FAZENDO LOGIN...");
-
-      // 2️⃣ login real
-      const response = await api.post("/auth/login", {
-        email,
-        password,
-      });
-
-      console.log("LOGIN RESPONSE:", response.data);
-
-      // ⚠️ IMPORTANTE: vamos pegar exatamente o que vem
-      const user = response.data.user;
-      const token = response.data.token;
-
-      if (!user || !token) {
-        console.error("USER OU TOKEN NÃO VEIO:", response.data);
-        setMsg("Erro interno ao logar automaticamente.");
-        return;
-      }
-
-      // 3️⃣ salva sessão
-      login(user, token);
-
+      // vai direto para o app
+      navigate("/app", { replace: true });
     } catch (err) {
-      console.error("ERRO REGISTER:", err.response?.data || err.message);
-      setMsg(err.response?.data?.message || "Erro ao criar usuário");
+      setMsg(err.response?.data?.message || "Erro ao registrar");
     }
   }
+
+  const inputStyle = {
+    width: "100%",
+    padding: "10px 12px",
+    borderRadius: 10,
+    border: "1px solid rgba(255,255,255,0.12)",
+    background: "#121212",
+    color: "white",
+    outline: "none",
+  };
+
+  const buttonStyle = {
+    width: "100%",
+    padding: "10px 12px",
+    borderRadius: 999,
+    border: "none",
+    background: "#1db954",
+    color: "black",
+    fontWeight: 800,
+    cursor: "pointer",
+  };
 
   return (
     <AuthLayout>
       <form
         onSubmit={handleSubmit}
-        style={{
-          background: "#fff",
-          padding: "2rem",
-          borderRadius: 8,
-          minWidth: 300
-        }}
+        style={{ display: "flex", flexDirection: "column", gap: 12 }}
       >
-        <h2>Registrar</h2>
+        <h2>Criar conta</h2>
 
         <input
           placeholder="Nome"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          style={{ width: "100%", marginBottom: ".8rem", padding: ".6rem" }}
+          style={inputStyle}
         />
 
         <input
-          type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{ width: "100%", marginBottom: ".8rem", padding: ".6rem" }}
+          style={inputStyle}
         />
 
         <input
@@ -87,16 +79,18 @@ export default function Register() {
           placeholder="Senha"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={{ width: "100%", marginBottom: "1rem", padding: ".6rem" }}
+          style={inputStyle}
         />
 
-        <button type="submit">Criar conta</button>
+        {msg && <p style={{ color: "salmon" }}>{msg}</p>}
 
-        {msg && (
-          <p style={{ marginTop: "1rem", color: "red" }}>
-            {msg}
-          </p>
-        )}
+        <button type="submit" style={buttonStyle}>
+          Cadastrar
+        </button>
+
+        <p style={{ fontSize: 13, opacity: 0.8 }}>
+          Já tem conta? <Link to="/login">Entrar</Link>
+        </p>
       </form>
     </AuthLayout>
   );

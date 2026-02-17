@@ -1,0 +1,138 @@
+.topbar {
+  position: sticky; /* fica no topo ao rolar */
+  top: 0;
+  z-index: 50;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+
+  padding: 14px 18px;
+
+  background: rgba(18, 18, 18, 0.70);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
+
+  cursor: pointer;
+}
+
+.nav-btn:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 12px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+
+  min-width: 260px;
+  max-width: 520px;
+  width: 40vw;
+}
+
+.search.disabled {
+  opacity: 0.6;
+}
+
+.search-icon {
+  opacity: 0.85;
+}
+
+.search input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: #fff;
+  font-size: 14px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+
+  padding: 8px 12px;
+  border-radius: 999px;
+  max-width: 260px;
+}
+
+.user-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #1db954;
+  box-shadow: 0 0 12px rgba(29, 185, 84, 0.35);
+  flex-shrink: 0;
+}
+
+.user-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.95;
+  font-size: 13px;
+}
+
+.logout-btn {
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #fff;
+
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #333;
+}
+
+@media (max-width: 768px) {
+  .search {
+    display: none;
+  }
+  .user-pill {
+    max-width: 180px;
+  }
+}

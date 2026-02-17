@@ -1,39 +1,100 @@
-:root{
-  --sidebar-bg: #121212;
-  --main-bg: #121212;
-  --panel-bg: #181818;
-  --accent: #1db954;
-  --text: #ffffff;
-  --muted: #b3b3b3;
+/* ---------- Layout base ---------- */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  background: #121212;
+  color: #fff;
 }
 
-*{box-sizing:border-box}
-body, #root { height: 100%; margin:0; font-family: Arial, sans-serif; }
-
-.app-layout { display: flex; min-height: 100vh; background: var(--main-bg); color: var(--text); }
-
-/* SIDEBAR */
-.sidebar{
-  width: 220px;
-  background: var(--sidebar-bg);
-  padding: 20px;
-  display:flex;
-  flex-direction:column;
-  gap: 16px;
+/* Conteúdo à direita (Topbar + páginas + Player fixo) */
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* evita overflow horizontal em grids */
 }
-.brand { font-weight: bold; color: var(--accent); margin-bottom: 8px; }
-.nav a { display:block; color:var(--muted); text-decoration:none; padding:6px 0; }
-.nav a.active { color:var(--text); font-weight:600; }
 
-/* MAIN */
-.app-main { flex:1; display:flex; flex-direction:column; min-height: 100vh; }
-.topbar { height:60px; background: transparent; display:flex; align-items:center; justify-content:space-between; padding:0 20px; border-bottom: 1px solid rgba(255,255,255,0.03); }
-.app-content { flex:1; padding:20px; background: linear-gradient(180deg,#121212,#0f0f0f); color:var(--text); }
+/* ---------- Área de páginas ---------- */
+.app-content {
+  flex: 1;
+  padding: 24px;
+  overflow: auto;
+  padding-bottom: 120px; /* espaço seguro pro player fixo */
+  min-width: 0;
 
-/* PLAYER */
-.player { height:80px; background:var(--panel-bg); display:flex; align-items:center; justify-content:space-between; padding:0 20px; border-top:1px solid rgba(255,255,255,0.03); color:var(--muted); }
-.player-center{ text-align:center; }
+  /* sensação mais “Spotify” */
+  background: radial-gradient(1200px 600px at 20% 0%, rgba(255, 255, 255, 0.06), transparent 60%),
+              radial-gradient(900px 500px at 80% 0%, rgba(255, 255, 255, 0.04), transparent 55%);
+}
 
-/* utility */
-.small { color: var(--muted); font-size: 12px; margin:0 0 6px 0; }
-.playlists ul { list-style:none; padding:0; margin:0; color:var(--muted); font-size:14px }
+/* Scrollbar discreta (Chrome/Edge) */
+.app-content::-webkit-scrollbar {
+  width: 10px;
+}
+.app-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.app-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+}
+.app-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Scrollbar discreta (Firefox) */
+.app-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+}
+
+/* ---------- Player fixo ---------- */
+.player {
+  position: fixed;
+  bottom: 0;
+  left: 220px; /* largura da sidebar */
+  right: 0;
+
+  background: rgba(24, 24, 24, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.45);
+
+  z-index: 100;
+}
+
+/* Botões do player com aparência mais limpa */
+.player button {
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.player button:hover {
+  background: #333;
+}
+.player button:active {
+  transform: scale(0.98);
+}
+
+/* Range (progresso/volume) um pouco mais bonito */
+.player input[type="range"] {
+  accent-color: #1db954; /* verdinho Spotify */
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 768px) {
+  .app-content {
+    padding: 16px;
+    padding-bottom: 150px;
+  }
+
+  .player {
+    left: 0; /* no mobile, sidebar geralmente vira drawer */
+  }
+}

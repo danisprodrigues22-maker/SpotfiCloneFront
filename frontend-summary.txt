@@ -1,0 +1,1325 @@
+=========================================
+PROJETO FRONTEND
+Gerado em: seg 16 fev 2026 21:33:35 -03
+=========================================
+
+========== ESTRUTURA COMPLETA ==========
+.
+├── eslint.config.js
+├── frontend-summary.txt
+├── .gitignore
+├── index.html
+├── package.json
+├── package-lock.json
+├── public
+│   └── vite.svg
+├── README.md
+├── src
+│   ├── App.css
+│   ├── App.jsx
+│   ├── assets
+│   │   └── react.svg
+│   ├── components
+│   │   └── TrackRow.jsx
+│   ├── contexts
+│   │   ├── AuthContext.jsx
+│   │   └── PlayerContext.jsx
+│   ├── index.css
+│   ├── layout
+│   │   ├── AppLayout.css
+│   │   ├── AppLayout.jsx
+│   │   ├── AuthLayout.jsx
+│   │   ├── Player.jsx
+│   │   ├── Sidebar.jsx
+│   │   └── Topbar.jsx
+│   ├── main.jsx
+│   ├── pages
+│   │   ├── AppHome.jsx
+│   │   ├── AppPage.jsx
+│   │   ├── Home.jsx
+│   │   ├── Login.jsx
+│   │   ├── Register.jsx
+│   │   └── Songs.jsx
+│   ├── routes
+│   │   └── ProtectedRoute.jsx
+│   └── services
+│       └── api.js
+└── vite.config.js
+
+10 directories, 31 files
+
+========== CONTEÚDO DOS ARQUIVOS ==========
+
+-----------------------------------------
+ARQUIVO: ./eslint.config.js
+-----------------------------------------
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{js,jsx}'],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+    },
+  },
+])
+
+-----------------------------------------
+ARQUIVO: ./package.json
+-----------------------------------------
+{
+  "name": "projetofinalfront",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.13.5",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^6.30.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "vite": "^7.3.1"
+  }
+}
+
+-----------------------------------------
+ARQUIVO: ./package-lock.json
+-----------------------------------------
+{
+  "name": "projetofinalfront",
+  "version": "0.0.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "projetofinalfront",
+      "version": "0.0.0",
+      "dependencies": {
+        "axios": "^1.13.5",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0",
+        "react-router-dom": "^6.30.3"
+      },
+      "devDependencies": {
+        "@eslint/js": "^9.39.1",
+        "@types/react": "^19.2.7",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^5.1.1",
+        "eslint": "^9.39.1",
+        "eslint-plugin-react-hooks": "^7.0.1",
+        "eslint-plugin-react-refresh": "^0.4.24",
+        "globals": "^16.5.0",
+        "vite": "^7.3.1"
+      }
+    },
+    "node_modules/@babel/code-frame": {
+      "version": "7.29.0",
+      "resolved": "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.29.0.tgz",
+      "integrity": "sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-validator-identifier": "^7.28.5",
+        "js-tokens": "^4.0.0",
+        "picocolors": "^1.1.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/compat-data": {
+      "version": "7.29.0",
+      "resolved": "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.29.0.tgz",
+      "integrity": "sha512-T1NCJqT/j9+cn8fvkt7jtwbLBfLC/1y1c7NtCeXFRgzGTsafi68MRv8yzkYSapBnFA6L3U2VSc02ciDzoAJhJg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/core": {
+      "version": "7.29.0",
+      "resolved": "https://registry.npmjs.org/@babel/core/-/core-7.29.0.tgz",
+      "integrity": "sha512-CGOfOJqWjg2qW/Mb6zNsDm+u5vFQ8DxXfbM09z69p5Z6+mE1ikP2jUXw+j42Pf1XTYED2Rni5f95npYeuwMDQA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/code-frame": "^7.29.0",
+        "@babel/generator": "^7.29.0",
+        "@babel/helper-compilation-targets": "^7.28.6",
+        "@babel/helper-module-transforms": "^7.28.6",
+        "@babel/helpers": "^7.28.6",
+        "@babel/parser": "^7.29.0",
+        "@babel/template": "^7.28.6",
+        "@babel/traverse": "^7.29.0",
+        "@babel/types": "^7.29.0",
+        "@jridgewell/remapping": "^2.3.5",
+        "convert-source-map": "^2.0.0",
+        "debug": "^4.1.0",
+        "gensync": "^1.0.0-beta.2",
+        "json5": "^2.2.3",
+        "semver": "^6.3.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/babel"
+      }
+    },
+    "node_modules/@babel/generator": {
+      "version": "7.29.1",
+      "resolved": "https://registry.npmjs.org/@babel/generator/-/generator-7.29.1.tgz",
+      "integrity": "sha512-qsaF+9Qcm2Qv8SRIMMscAvG4O3lJ0F1GuMo5HR/Bp02LopNgnZBC/EkbevHFeGs4ls/oPz9v+Bsmzbkbe+0dUw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/parser": "^7.29.0",
+        "@babel/types": "^7.29.0",
+        "@jridgewell/gen-mapping": "^0.3.12",
+        "@jridgewell/trace-mapping": "^0.3.28",
+        "jsesc": "^3.0.2"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-compilation-targets": {
+      "version": "7.28.6",
+      "resolved": "https://registry.npmjs.org/@babel/helper-compilation-targets/-/helper-compilation-targets-7.28.6.tgz",
+      "integrity": "sha512-JYtls3hqi15fcx5GaSNL7SCTJ2MNmjrkHXg4FSpOA/grxK8KwyZ5bubHsCq8FXCkua6xhuaaBit+3b7+VZRfcA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/compat-data": "^7.28.6",
+        "@babel/helper-validator-option": "^7.27.1",
+        "browserslist": "^4.24.0",
+        "lru-cache": "^5.1.1",
+        "semver": "^6.3.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-globals": {
+      "version": "7.28.0",
+      "resolved": "https://registry.npmjs.org/@babel/helper-globals/-/helper-globals-7.28.0.tgz",
+      "integrity": "sha512-+W6cISkXFa1jXsDEdYA8HeevQT/FULhxzR99pxphltZcVaugps53THCeiWA8SguxxpSp3gKPiuYfSWopkLQ4hw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-module-imports": {
+      "version": "7.28.6",
+      "resolved": "https://registry.npmjs.org/@babel/helper-module-imports/-/helper-module-imports-7.28.6.tgz",
+      "integrity": "sha512-l5XkZK7r7wa9LucGw9LwZyyCUscb4x37JWTPz7swwFE/0FMQAGpiWUZn8u9DzkSBWEcK25jmvubfpw2dnAMdbw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/traverse": "^7.28.6",
+        "@babel/types": "^7.28.6"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-module-transforms": {
+      "version": "7.28.6",
+      "resolved": "https://registry.npmjs.org/@babel/helper-module-transforms/-/helper-module-transforms-7.28.6.tgz",
+      "integrity": "sha512-67oXFAYr2cDLDVGLXTEABjdBJZ6drElUSI7WKp70NrpyISso3plG9SAGEF6y7zbha/wOzUByWWTJvEDVNIUGcA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-module-imports": "^7.28.6",
+        "@babel/helper-validator-identifier": "^7.28.5",
+        "@babel/traverse": "^7.28.6"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      },
+      "peerDependencies": {
+        "@babel/core": "^7.0.0"
+      }
+    },
+    "node_modules/@babel/helper-plugin-utils": {
+      "version": "7.28.6",
+      "resolved": "https://registry.npmjs.org/@babel/helper-plugin-utils/-/helper-plugin-utils-7.28.6.tgz",
+      "integrity": "sha512-S9gzZ/bz83GRysI7gAD4wPT/AI3uCnY+9xn+Mx/KPs2JwHJIz1W8PZkg2cqyt3RNOBM8ejcXhV6y8Og7ly/Dug==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-string-parser": {
+      "version": "7.27.1",
+      "resolved": "https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-7.27.1.tgz",
+      "integrity": "sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-validator-identifier": {
+      "version": "7.28.5",
+      "resolved": "https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-7.28.5.tgz",
+      "integrity": "sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-validator-option": {
+      "version": "7.27.1",
+      "resolved": "https://registry.npmjs.org/@babel/helper-validator-option/-/helper-validator-option-7.27.1.tgz",
+      "integrity": "sha512-YvjJow9FxbhFFKDSuFnVCe2WxXk1zWc22fFePVNEaWJEu8IrZVlda6N0uHwzZrUM1il7NC9Mlp4MaJYbYd9JSg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helpers": {
+      "version": "7.28.6",
+      "resolved": "https://registry.npmjs.org/@babel/helpers/-/helpers-7.28.6.tgz",
+      "integrity": "sha512-xOBvwq86HHdB7WUDTfKfT/Vuxh7gElQ+Sfti2Cy6yIWNW05P8iUslOVcZ4/sKbE+/jQaukQAdz/gf3724kYdqw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/template": "^7.28.6",
+        "@babel/types": "^7.28.6"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/parser": {
+      "version": "7.29.0",
+      "resolved": "https://registry.npmjs.org/@babel/parser/-/parser-7.29.0.tgz",
+      "integrity": "sha512-IyDgFV5GeDUVX4YdF/3CPULtVGSXXMLh1xVIgdCgxApktqnQV0r7/8Nqthg+8YLGaAtdyIlo2qIdZrbCv4+7ww==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/types": "^7.29.0"
+      },
+      "bin": {
+        "parser": "bin/babel-parser.js"
+      },
+      "engines": {
+        "node": ">=6.0.0"
+      }
+    },
+    "node_modules/@babel/plugin-transform-react-jsx-self": {
+      "version": "7.27.1",
+      "resolved": "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-self/-/plugin-transform-react-jsx-self-7.27.1.tgz",
+      "integrity": "sha512-6UzkCs+ejGdZ5mFFC/OCUrv028ab2fp1znZmCZjAOBKiBK2jXD1O+BPSfX8X2qjJ75fZBMSnQn3Rq2mrBJK2mw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-plugin-utils": "^7.27.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      },
+      "peerDependencies": {
+        "@babel/core": "^7.0.0-0"
+      }
+    },
+    "node_modules/@babel/plugin-transform-react-jsx-source": {
+      "version": "7.27.1",
+      "resolved": "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-source/-/plugin-transform-react-jsx-source-7.27.1.tgz",
+      "integrity": "sha512-zbwoTsBruTeKB9hSq73ha66iFeJHuaFkUbwvqElnygoNbj/jHRsSeokowZFN3CZ64IvEqcmmkVe89OPXc7ldAw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-plugin-utils": "^7.27.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      },
+      "peerDependencies": {
+        "@babel/core": "^7.0.0-0"
+      }
+    },
+    "node_modules/@babel/template": {
+      "version": "7.28.6",
+      "resolved": "https://registry.npmjs.org/@babel/template/-/template-7.28.6.tgz",
+      "integrity": "sha512-YA6Ma2KsCdGb+WC6UpBVFJGXL58MDA6oyONbjyF/+5sBgxY/dwkhLogbMT2GXXyU84/IhRw/2D1Os1B/giz+BQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/code-frame": "^7.28.6",
+        "@babel/parser": "^7.28.6",
+        "@babel/types": "^7.28.6"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/traverse": {
+      "version": "7.29.0",
+      "resolved": "https://registry.npmjs.org/@babel/traverse/-/traverse-7.29.0.tgz",
+      "integrity": "sha512-4HPiQr0X7+waHfyXPZpWPfWL/J7dcN1mx9gL6WdQVMbPnF3+ZhSMs8tCxN7oHddJE9fhNE7+lxdnlyemKfJRuA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/code-frame": "^7.29.0",
+        "@babel/generator": "^7.29.0",
+        "@babel/helper-globals": "^7.28.0",
+        "@babel/parser": "^7.29.0",
+        "@babel/template": "^7.28.6",
+        "@babel/types": "^7.29.0",
+        "debug": "^4.3.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/types": {
+      "version": "7.29.0",
+      "resolved": "https://registry.npmjs.org/@babel/types/-/types-7.29.0.tgz",
+      "integrity": "sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-string-parser": "^7.27.1",
+        "@babel/helper-validator-identifier": "^7.28.5"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@esbuild/aix-ppc64": {
+      "version": "0.27.3",
+      "resolved": "https://registry.npmjs.org/@esbuild/aix-ppc64/-/aix-ppc64-0.27.3.tgz",
+      "integrity": "sha512-9fJMTNFTWZMh5qwrBItuziu834eOCUcEqymSH7pY+zoMVEZg3gcPuBNxH1EvfVYe9h0x/Ptw8KBzv7qxb7l8dg==",
+      "cpu": [
+        "ppc64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "aix"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/android-arm": {
+      "version": "0.27.3",
+      "resolved": "https://registry.npmjs.org/@esbuild/android-arm/-/android-arm-0.27.3.tgz",
+      "integrity": "sha512-i5D1hPY7GIQmXlXhs2w8AWHhenb00+GxjxRncS2ZM7YNVGNfaMxgzSGuO8o8SJzRc/oZwU2bcScvVERk03QhzA==",
+      "cpu": [
+        "arm"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/android-arm64": {
+      "version": "0.27.3",
+      "resolved": "https://registry.npmjs.org/@esbuild/android-arm64/-/android-arm64-0.27.3.tgz",
+      "integrity": "sha512-YdghPYUmj/FX2SYKJ0OZxf+iaKgMsKHVPF1MAq/P8WirnSpCStzKJFjOjzsW0QQ7oIAiccHdcqjbHmJxRb/dmg==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/android-x64": {
+      "version": "0.27.3",
+      "resolved": "https://registry.npmjs.org/@esbuild/android-x64/-/android-x64-0.27.3.tgz",
+      "integrity": "sha512-IN/0BNTkHtk8lkOM8JWAYFg4ORxBkZQf9zXiEOfERX/CzxW3Vg1ewAhU7QSWQpVIzTW+b8Xy+lGzdYXV6UZObQ==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/darwin-arm64": {
+      "version": "0.27.3",
+      "resolved": "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.27.3.tgz",
+      "integrity": "sha512-Re491k7ByTVRy0t3EKWajdLIr0gz2kKKfzafkth4Q8A5n1xTHrkqZgLLjFEHVD+AXdUGgQMq+Godfq45mGpCKg==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/darwin-x64": {
+      "version": "0.27.3",
+      "resolved": "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.27.3.tgz",
+      "integrity": "sha512-vHk/hA7/1AckjGzRqi6wbo+jaShzRowYip6rt6q7VYEDX4LEy1pZfDpdxCBnGtl+A5zq8iXDcyuxwtv3hNtHFg==",
+      "cpu": [
+        "x64"
+
+-----------------------------------------
+ARQUIVO: ./src/App.jsx
+-----------------------------------------
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import AppLayout from "./layout/AppLayout";
+import AppHome from "./pages/AppHome";
+import Songs from "./pages/Songs";
+
+import ProtectedRoute from "./routes/ProtectedRoute";
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      <Route
+        path="/app"
+        element={
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<AppHome />} />
+        <Route path="browse" element={<Songs />} />
+        <Route path="library" element={<div>Sua Biblioteca (placeholder)</div>} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/components/TrackRow.jsx
+-----------------------------------------
+import { useContext } from "react";
+import { PlayerContext } from "../contexts/PlayerContext";
+
+export default function TrackRow({ track, index, fullList }) {
+  const { current, isPlaying, loadPlaylist } =
+    useContext(PlayerContext);
+
+  const isCurrent = current?._id === track._id;
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "10px",
+        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        background: isCurrent ? "rgba(30,215,96,0.08)" : "transparent",
+      }}
+    >
+      <div>
+        <strong>{track.title}</strong>
+        <div style={{ fontSize: 13, opacity: 0.6 }}>
+          {track.artist}
+        </div>
+      </div>
+
+      <button
+        onClick={() => loadPlaylist(fullList, index)}
+        style={{
+          padding: "6px 12px",
+          cursor: "pointer",
+        }}
+      >
+        {isCurrent && isPlaying ? "Pause" : "Play"}
+      </button>
+    </div>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/contexts/AuthContext.jsx
+-----------------------------------------
+import { createContext, useEffect, useState } from "react";
+import api from "../services/api";
+
+export const AuthContext = createContext();
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // 🔐 Carrega usuário ao iniciar a app
+  useEffect(() => {
+    async function loadUser() {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { data } = await api.get("/auth/me");
+        setUser(data.user);
+      } catch (error) {
+        localStorage.removeItem("token");
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadUser();
+  }, []);
+
+  // login flexível:
+  // - login(email, password) -> faz request ao backend
+  // - login(user, token) -> usa dados já obtidos (auto-login após register)
+  async function login(a, b) {
+    // caso credenciais (email, password)
+    if (typeof a === "string" && typeof b === "string") {
+      const email = a;
+      const password = b;
+      const { data } = await api.post("/auth/login", { email, password });
+
+      localStorage.setItem("token", data.token);
+      setUser(data.user);
+      return data;
+    }
+
+    // caso (user, token) — já temos resposta do backend (register fez o POST)
+    const userData = a;
+    const token = b;
+
+    if (userData && token) {
+      localStorage.setItem("token", token);
+      setUser(userData);
+      return { user: userData, token };
+    }
+
+    throw new Error("Invalid args for login");
+  }
+
+  function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+  }
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/contexts/PlayerContext.jsx
+-----------------------------------------
+import { createContext, useState } from "react";
+
+export const PlayerContext = createContext();
+
+export function PlayerProvider({ children }) {
+  const [playlist, setPlaylist] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const current = currentIndex !== null ? playlist[currentIndex] : null;
+
+  function loadPlaylist(tracks, startIndex = 0) {
+    setPlaylist(tracks);
+    setCurrentIndex(startIndex);
+    setIsPlaying(true);
+  }
+
+  function playTrack(track, tracks = []) {
+    if (tracks.length > 0) {
+      loadPlaylist(tracks, tracks.findIndex(t => t._id === track._id));
+    } else {
+      setPlaylist([track]);
+      setCurrentIndex(0);
+    }
+    setIsPlaying(true);
+  }
+
+  function togglePlay() {
+    setIsPlaying(prev => !prev);
+  }
+
+  function next() {
+    if (currentIndex < playlist.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+      setIsPlaying(true);
+    }
+  }
+
+  function previous() {
+    if (currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1);
+      setIsPlaying(true);
+    }
+  }
+
+  return (
+    <PlayerContext.Provider
+      value={{
+        playlist,
+        current,
+        currentIndex,
+        isPlaying,
+        playTrack,
+        togglePlay,
+        next,
+        previous,
+        loadPlaylist
+      }}
+    >
+      {children}
+    </PlayerContext.Provider>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/layout/AppLayout.jsx
+-----------------------------------------
+import { Outlet } from "react-router-dom";
+import Sidebar from "./Sidebar";
+import Player from "./Player";
+import Topbar from "./Topbar";
+import "./AppLayout.css";
+import { PlayerProvider } from "../contexts/PlayerContext";
+
+export default function AppLayout() {
+  return (
+    <PlayerProvider>
+      <div className="app-layout">
+        <Sidebar />
+
+        <div className="app-main">
+          <Topbar />
+
+          <main className="app-content">
+            <Outlet />
+          </main>
+
+          <Player />
+        </div>
+      </div>
+    </PlayerProvider>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/layout/AuthLayout.jsx
+-----------------------------------------
+export default function AuthLayout({ children }) {
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#f5f5f5",
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
+
+-----------------------------------------
+ARQUIVO: ./src/layout/Player.jsx
+-----------------------------------------
+import { useContext, useEffect, useRef, useState } from "react";
+import { PlayerContext } from "../contexts/PlayerContext";
+import api from "../services/api";
+
+export default function Player() {
+  const { current, isPlaying, togglePlay, next, previous } =
+    useContext(PlayerContext);
+
+  const audioRef = useRef(new Audio());
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  const baseURL = import.meta.env.VITE_API_URL || "http://localhost:4200";
+
+  /* 🎵 Quando troca a música */
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    if (!current) return;
+
+    audio.src = `${baseURL}${current.audioUrl}`;
+    audio.currentTime = 0;
+
+    setProgress(0);
+    setDuration(0);
+
+    audio
+      .play()
+      .catch(() => console.log("Autoplay bloqueado pelo navegador"));
+
+    updatePlayCount(current._id);
+
+    audio.onloadedmetadata = () => {
+      setDuration(audio.duration || 0);
+    };
+
+    audio.ontimeupdate = () => {
+      setProgress(audio.currentTime);
+    };
+
+    audio.onended = () => {
+      next();
+    };
+
+    return () => {
+      audio.pause();
+    };
+  }, [current]);
+
+  /* ▶ Controle play/pause */
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!current) return;
+
+    if (isPlaying) {
+      audio.play().catch(() => {});
+    } else {
+      audio.pause();
+    }
+  }, [isPlaying, current]);
+
+  function handleSeek(e) {
+    const audio = audioRef.current;
+    const value = Number(e.target.value);
+
+    audio.currentTime = value;
+    setProgress(value);
+  }
+
+  async function updatePlayCount(id) {
+    try {
+      await api.patch(`/songs/${id}/play`);
+    } catch (err) {
+      console.log("Erro ao atualizar plays");
+    }
+  }
+
+  function formatTime(time) {
+    if (!time) return "0:00";
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60)
+      .toString()
+      .padStart(2, "0");
+    return `${minutes}:${seconds}`;
+  }
+
+  if (!current) {
+    return <div className="player">Nenhuma música selecionada</div>;
+  }
+
+  return (
+    <div className="player" style={{ padding: 12 }}>
+      <div>
+        <strong>{current.title}</strong>
+        <div style={{ fontSize: 12 }}>{current.artist}</div>
+      </div>
+
+      <div style={{ marginTop: 10 }}>
+        <button onClick={previous}>⏮</button>
+        <button onClick={togglePlay}>
+          {isPlaying ? "⏸" : "▶"}
+        </button>
+        <button onClick={next}>⏭</button>
+      </div>
+
+      <div style={{ marginTop: 10 }}>
+        <input
+          type="range"
+          min="0"
+          max={duration}
+          value={progress}
+          onChange={handleSeek}
+          style={{ width: "100%" }}
+        />
+        <div style={{ fontSize: 12 }}>
+          {formatTime(progress)} / {formatTime(duration)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/layout/Sidebar.jsx
+-----------------------------------------
+import { Link } from "react-router-dom";
+
+export default function Sidebar() {
+  return (
+    <div
+      style={{
+        width: 220,
+        background: "#121212",
+        color: "white",
+        padding: 20,
+        height: "100vh",
+      }}
+    >
+      <h2 style={{ marginBottom: 30 }}>Lions Music</h2>
+
+      <nav style={{ display: "flex", flexDirection: "column", gap: 15 }}>
+        <Link to="/app" style={{ color: "white", textDecoration: "none" }}>
+          Home
+        </Link>
+
+        <Link to="/app/browse" style={{ color: "white", textDecoration: "none" }}>
+          Buscar
+        </Link>
+
+        <Link to="/app/library" style={{ color: "white", textDecoration: "none" }}>
+          Biblioteca
+        </Link>
+      </nav>
+    </div>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/layout/Topbar.jsx
+-----------------------------------------
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+
+export default function Topbar() {
+  const { user } = useContext(AuthContext);
+
+  return (
+    <header className="topbar">
+      <div className="search-placeholder">🔍 Buscar</div>
+      <div className="user-info">
+        <span>{user?.name || user?.email}</span>
+      </div>
+    </header>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/main.jsx
+-----------------------------------------
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import App from "./App";
+import "./index.css";
+
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <AuthProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </AuthProvider>
+  </StrictMode>
+);
+
+-----------------------------------------
+ARQUIVO: ./src/pages/AppHome.jsx
+-----------------------------------------
+export default function AppHome() {
+  return (
+    <div>
+      <h2>Início</h2>
+      <p>Bem-vindo ao SpotfyClone.</p>
+    </div>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/pages/AppPage.jsx
+-----------------------------------------
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+
+export default function AppPage() {
+  const { user, logout } = useContext(AuthContext);
+
+  return (
+    <div style={{ padding: 24 }}>
+      <h1>SpotfyClone</h1>
+      <p>Bem-vindo, {user?.name || user?.email}</p>
+      <p>Esta é a página principal (placeholder).</p>
+      <button onClick={() => logout()}>Sair</button>
+    </div>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/pages/Home.jsx
+-----------------------------------------
+import AuthLayout from "../layout/AuthLayout";
+import { useNavigate } from "react-router-dom";
+
+export default function Home() {
+  const nav = useNavigate();
+  return (
+    <AuthLayout>
+      <div style={{ background: "#fff", padding: 24, borderRadius: 8 }}>
+        <h1>Bem-vindo ao SpotfyClone</h1>
+        <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
+          <button onClick={() => nav("/login")} style={{ padding: "8px 12px" }}>
+            Entrar
+          </button>
+          <button onClick={() => nav("/register")} style={{ padding: "8px 12px" }}>
+            Registrar
+          </button>
+        </div>
+      </div>
+    </AuthLayout>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/pages/Login.jsx
+-----------------------------------------
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
+import api from "../services/api";
+
+export default function Login() {
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    try {
+      // eu deixei o request no componente (você também poderia usar login(email,password))
+      const response = await api.post("/auth/login", {
+        email,
+        password,
+      });
+
+      const { user, token } = response.data;
+
+      // informa o contexto (login aceita user+token)
+      await login(user, token);
+
+      // navega para área protegida
+      navigate("/app");
+    } catch (err) {
+      console.error("Erro no login", err);
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <h1>Login</h1>
+
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+
+      <input
+        type="password"
+        placeholder="Senha"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      <button type="submit">Entrar</button>
+    </form>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/pages/Register.jsx
+-----------------------------------------
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthLayout from "../layout/AuthLayout";
+import api from "../services/api";
+import { AuthContext } from "../contexts/AuthContext";
+
+export default function Register() {
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [msg, setMsg] = useState("");
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setMsg("");
+
+    try {
+      // 1️⃣ cria usuário
+      const registerResponse = await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
+
+      // 2️⃣ faz login (ou usa a resposta do register para chamar login)
+      const loginResponse = await api.post("/auth/login", { email, password });
+      const user = loginResponse.data.user;
+      const token = loginResponse.data.token;
+
+      if (!user || !token) {
+        setMsg("Erro ao logar automaticamente.");
+        return;
+      }
+
+      await login(user, token);
+      navigate("/app");
+    } catch (err) {
+      console.error("ERRO REGISTER:", err.response?.data || err.message);
+      setMsg(err.response?.data?.message || "Erro ao criar usuário");
+    }
+  }
+
+  return (
+    <AuthLayout>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          background: "#fff",
+          padding: "2rem",
+          borderRadius: 8,
+          minWidth: 300
+        }}
+      >
+        <h2>Registrar</h2>
+
+        <input
+          placeholder="Nome"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          style={{ width: "100%", marginBottom: ".8rem", padding: ".6rem" }}
+        />
+
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={{ width: "100%", marginBottom: ".8rem", padding: ".6rem" }}
+        />
+
+        <input
+          type="password"
+          placeholder="Senha"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={{ width: "100%", marginBottom: "1rem", padding: ".6rem" }}
+        />
+
+        <button type="submit">Criar conta</button>
+
+        {msg && (
+          <p style={{ marginTop: "1rem", color: "red" }}>
+            {msg}
+          </p>
+        )}
+      </form>
+    </AuthLayout>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/pages/Songs.jsx
+-----------------------------------------
+import { useEffect, useState } from "react";
+import api from "../services/api";
+import TrackRow from "../components/TrackRow";
+
+export default function Songs() {
+  const [songs, setSongs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchSongs() {
+      try {
+        const { data } = await api.get("/songs");
+        setSongs(data);
+      } catch (error) {
+        console.error("Erro ao buscar músicas:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchSongs();
+  }, []);
+
+  if (loading) {
+    return <div style={{ padding: 20 }}>Carregando músicas...</div>;
+  }
+
+  return (
+    <div style={{ padding: 20 }}>
+      <h2 style={{ marginBottom: 20 }}>Músicas</h2>
+
+      {songs.length === 0 ? (
+        <div>Nenhuma música encontrada.</div>
+      ) : (
+        songs.map((s, index) => (
+          <TrackRow
+            key={s._id}
+            track={s}
+            index={index}
+            fullList={songs}
+          />
+        ))
+      )}
+    </div>
+  );
+}
+
+-----------------------------------------
+ARQUIVO: ./src/routes/ProtectedRoute.jsx
+-----------------------------------------
+import { useContext } from "react";
+import { Navigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
+
+export default function ProtectedRoute({ children }) {
+  const { user, loading } = useContext(AuthContext);
+
+  if (loading) return <div>Carregando...</div>;
+
+  if (!user) return <Navigate to="/login" replace />;
+
+  return children;
+}
+
+-----------------------------------------
+ARQUIVO: ./src/services/api.js
+-----------------------------------------
+import axios from "axios";
+
+const baseURL = import.meta.env.VITE_API_URL || "http://localhost:4200";
+
+const api = axios.create({
+  baseURL: `${baseURL}/api`,
+});
+
+/* 🔐 REQUEST INTERCEPTOR */
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+/* 🚨 RESPONSE INTERCEPTOR */
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+
+      window.location.href = "/login";
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export default api;
+
+-----------------------------------------
+ARQUIVO: ./vite.config.js
+-----------------------------------------
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+

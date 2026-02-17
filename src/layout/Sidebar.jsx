@@ -1,23 +1,31 @@
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   return (
-    <aside className="sidebar">
-      <div className="brand">SpotfyClone</div>
+    <div
+      style={{
+        width: 220,
+        background: "#121212",
+        color: "white",
+        padding: 20,
+        height: "100vh",
+      }}
+    >
+      <h2 style={{ marginBottom: 30 }}>Lions Music</h2>
 
-      <nav className="nav">
-        <NavLink to="/app" end className={({isActive}) => isActive ? "active" : ""}>Início</NavLink>
-        <NavLink to="/app/browse" className={({isActive}) => isActive ? "active" : ""}>Buscar</NavLink>
-        <NavLink to="/app/library" className={({isActive}) => isActive ? "active" : ""}>Sua Biblioteca</NavLink>
+      <nav style={{ display: "flex", flexDirection: "column", gap: 15 }}>
+        <Link to="/app" style={{ color: "white", textDecoration: "none" }}>
+          Home
+        </Link>
+
+        <Link to="/app/browse" style={{ color: "white", textDecoration: "none" }}>
+          Buscar
+        </Link>
+
+        <Link to="/app/library" style={{ color: "white", textDecoration: "none" }}>
+          Biblioteca
+        </Link>
       </nav>
-
-      <div className="playlists">
-        <p className="small">Playlists</p>
-        <ul>
-          <li>Minha Playlist 1</li>
-          <li>Minha Playlist 2</li>
-        </ul>
-      </div>
-    </aside>
+    </div>
   );
 }
