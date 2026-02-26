@@ -91,22 +91,26 @@ export default function Player() {
       <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "center" }}>
         {/* Info (capa + texto) */}
 <div style={{ minWidth: 260, display: "flex", alignItems: "center", gap: 12 }}>
-  <div
-    style={{
-      width: 54,
-      height: 54,
-      borderRadius: 8,
-      background: "#333",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: 22,
-      flexShrink: 0,
-    }}
-    title="Capa (placeholder)"
-  >
-    🎵
-  </div>
+  <img
+  src={
+    current.coverUrl?.startsWith("http")
+      ? current.coverUrl
+      : `http://localhost:4200${current.coverUrl || "/uploads/covers/default.jpg"}`
+  }
+  alt={current.title}
+  style={{
+    width: 54,
+    height: 54,
+    borderRadius: 8,
+    objectFit: "cover",
+    background: "#333",
+    flexShrink: 0,
+  }}
+  onError={(e) => {
+    e.currentTarget.src = "http://localhost:4200/uploads/covers/default.jpg";
+  }}
+/>
+
 
   <div style={{ minWidth: 0 }}>
     <div
