@@ -10,6 +10,7 @@ import Songs from "./pages/Songs";
 import Library from "./pages/Library";
 import Playlist from "./pages/Playlist";
 import Playlists from "./pages/Playlists";
+import Search from "./pages/Search";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
@@ -18,16 +19,21 @@ export default function App() {
 
   return (
     <Routes>
-      {/* padrão: se logado vai pro app, senão vai pro login */}
+
+      {/* se logado vai para /app */}
       <Route
         path="/"
-        element={hasToken ? <Navigate to="/app" replace /> : <Navigate to="/login" replace />}
+        element={
+          hasToken
+            ? <Navigate to="/app" replace />
+            : <Navigate to="/login" replace />
+        }
       />
 
-      {/* (opcional) manter Home acessível */}
+      {/* home pública opcional */}
       <Route path="/home" element={<Home />} />
 
-      {/* públicas */}
+      {/* páginas públicas */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
@@ -41,18 +47,21 @@ export default function App() {
         }
       >
         <Route index element={<AppHome />} />
+
         <Route path="browse" element={<Songs />} />
 
-        {/* opção 1: manter Biblioteca */}
         <Route path="library" element={<Library />} />
 
-        {/* playlists */}
         <Route path="playlists" element={<Playlists />} />
         <Route path="playlist/:id" element={<Playlist />} />
+
+        {/* 🔎 página de busca */}
+        <Route path="search" element={<Search />} />
       </Route>
 
       {/* fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
+
     </Routes>
   );
 }

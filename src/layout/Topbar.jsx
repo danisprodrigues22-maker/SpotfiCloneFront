@@ -15,12 +15,19 @@ export default function Topbar() {
     navigate("/login", { replace: true });
   }
 
-  const isAppHome = location.pathname === "/app"; // só home
-  const showSearch = isAppHome;
+  function handleSearch(e) {
+    if (e.key === "Enter" && search.trim()) {
+      navigate(`/app/search?q=${encodeURIComponent(search.trim())}`);
+    }
+  }
+
+  // 🔎 busca disponível em todas páginas do app
+  const showSearch = location.pathname.startsWith("/app");
 
   return (
     <header className="topbar">
       <div className="topbar-left">
+
         <div className="nav-buttons">
           <button
             className="nav-btn"
@@ -30,6 +37,7 @@ export default function Topbar() {
           >
             ←
           </button>
+
           <button
             className="nav-btn"
             onClick={() => navigate(1)}
@@ -40,14 +48,15 @@ export default function Topbar() {
           </button>
         </div>
 
-        {/* Busca só aparece na home */}
         {showSearch && (
           <div className="search">
             <span className="search-icon">🔍</span>
+
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar (em breve: músicas, playlists...)"
+              onKeyDown={handleSearch}
+              placeholder="Buscar músicas ou artistas"
             />
           </div>
         )}
@@ -56,10 +65,16 @@ export default function Topbar() {
       <div className="topbar-right">
         <div className="user-pill" title={user?.email}>
           <span className="user-dot" />
-          <span className="user-name">{user?.name || user?.email}</span>
+          <span className="user-name">
+            {user?.name || user?.email}
+          </span>
         </div>
 
-        <button className="logout-btn" onClick={handleLogout} type="button">
+        <button
+          className="logout-btn"
+          onClick={handleLogout}
+          type="button"
+        >
           Sair
         </button>
       </div>

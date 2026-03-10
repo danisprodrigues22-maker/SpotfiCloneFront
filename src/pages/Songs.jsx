@@ -1,7 +1,23 @@
 import { useEffect, useMemo, useState, useContext } from "react";
 import api from "../services/api";
+import EmptyState from "../components/EmptyState";
 import { PlayerContext } from "../contexts/PlayerContext";
 import { LikesContext } from "../contexts/LikesContext";
+import { ToastContext } from "../contexts/ToastContext";
+
+const baseHost = import.meta.env.VITE_API_URL || "http://localhost:4200";
+
+function coverOf(song) {
+  if (!song?.coverUrl) {
+    return `${baseHost}/uploads/covers/default.jpg`;
+  }
+
+  if (song.coverUrl.startsWith("http")) {
+    return `${baseHost}/covers/proxy?url=${encodeURIComponent(song.coverUrl)}`;
+  }
+
+  return `${baseHost}${song.coverUrl}`;
+}
 
 export default function Songs() {
   const [songs, setSongs] = useState([]);
@@ -10,13 +26,12 @@ export default function Songs() {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
-  // playlists do usuário (para dropdown)
   const [playlists, setPlaylists] = useState([]);
   const [openMenuSongId, setOpenMenuSongId] = useState(null);
-  const [toast, setToast] = useState("");
 
-  const { playTrack, current } = useContext(PlayerContext);
+  const { playTrack, current, queueNext } = useContext(PlayerContext);
   const { likedIds, like, unlike } = useContext(LikesContext);
+  const { showToast } = useContext(ToastContext);
 
   // debounce busca
   useEffect(() => {
@@ -39,26 +54,16 @@ export default function Songs() {
     fetchSongs();
   }, []);
 
-  // carregar playlists (para o menu)
+  // carregar playlists
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
     async function fetchPlaylists() {
       try {
-        const { data } = await api.get("/playlists");
-        const list = Array.isArray(data) ? data : (data.playlists || []);
-
-        // filtra para mostrar só playlists do usuário logado (quando possível)
-        const rawUser = localStorage.getItem("user");
-        const user = rawUser ? JSON.parse(rawUser) : null;
-
-        const onlyMine =
-          user?._id
-            ? list.filter((p) => p.owner?._id === user._id)
-            : list;
-
-        setPlaylists(onlyMine);
+        const { data } = await api.get("/playlists/me");
+        const list = Array.isArray(data) ? data : data.playlists || [];
+        setPlaylists(list);
       } catch {
         setPlaylists([]);
       }
@@ -70,6 +75,7 @@ export default function Songs() {
   const filtered = useMemo(() => {
     const q = debouncedQuery.trim().toLowerCase();
     if (!q) return songs;
+
     return songs.filter((s) => {
       const t = (s.title || "").toLowerCase();
       const a = (s.artist || "").toLowerCase();
@@ -80,14 +86,12 @@ export default function Songs() {
   async function addToPlaylist(playlistId, songId) {
     try {
       await api.post(`/playlists/${playlistId}/songs`, { songId });
-      setToast("Adicionada à playlist ✅");
+      showToast("Adicionada à playlist ✅");
     } catch (e) {
       const msg = e?.response?.data?.message || "Erro ao adicionar";
-      // se já estiver na playlist, backend pode retornar 400 "Song already in playlist"
-      setToast(msg);
+      showToast(msg);
     } finally {
       setOpenMenuSongId(null);
-      setTimeout(() => setToast(""), 1800);
     }
   }
 
@@ -95,26 +99,6 @@ export default function Songs() {
 
   return (
     <div onClick={() => setOpenMenuSongId(null)}>
-      {/* toast simples */}
-      {toast && (
-        <div
-          style={{
-            position: "fixed",
-            bottom: 90,
-            left: "50%",
-            transform: "translateX(-50%)",
-            background: "#181818",
-            border: "1px solid rgba(255,255,255,0.08)",
-            padding: "10px 14px",
-            borderRadius: 999,
-            zIndex: 9999,
-            fontWeight: 700,
-          }}
-        >
-          {toast}
-        </div>
-      )}
-
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
         <h2 style={{ margin: 0 }}>Buscar</h2>
 
@@ -134,9 +118,21 @@ export default function Songs() {
         />
       </div>
 
-      {filtered.length === 0 && <p>Nenhuma música encontrada.</p>}
+      {filtered.length === 0 && (
+        <EmptyState
+          icon="🔎"
+          title="Nenhuma música encontrada"
+          description="Tente buscar por outro nome ou artista."
+        />
+      )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 20 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+          gap: 20,
+        }}
+      >
         {filtered.map((song) => {
           const isCurrent = current?._id === song._id;
           const liked = likedIds.has(song._id);
@@ -144,11 +140,8 @@ export default function Songs() {
           return (
             <div
               key={song._id}
-              onClick={(e) => {
-                // se menu estiver aberto, evita clique “atrás”
-                if (openMenuSongId) return;
-                playTrack(song, filtered);
-              }}
+              className="card-hover"
+              onClick={() => playTrack(song, filtered)}
               style={{
                 background: isCurrent ? "#2a2a2a" : "#181818",
                 padding: 16,
@@ -158,16 +151,20 @@ export default function Songs() {
                 position: "relative",
               }}
             >
+              {/* MENU SUPERIOR */}
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                {/* botão + menu playlist */}
                 <div style={{ position: "relative" }}>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setOpenMenuSongId((prev) => (prev === song._id ? null : song._id));
                     }}
-                    style={{ background: "transparent", border: "none", cursor: "pointer", fontSize: 18 }}
-                    title="Adicionar à playlist"
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: 18,
+                    }}
                   >
                     ➕
                   </button>
@@ -187,9 +184,34 @@ export default function Songs() {
                         zIndex: 50,
                       }}
                     >
-                      <div style={{ fontSize: 12, opacity: 0.8, padding: "6px 8px" }}>
-                        Adicionar em:
-                      </div>
+                      <button
+                        onClick={() => {
+                          queueNext(song);
+                          showToast("Adicionada à fila 🎧");
+                          setOpenMenuSongId(null);
+                        }}
+                        style={{
+                          width: "100%",
+                          textAlign: "left",
+                          padding: "8px 10px",
+                          borderRadius: 10,
+                          border: "none",
+                          background: "transparent",
+                          color: "white",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                        }}
+                      >
+                        🎧 Adicionar à fila
+                      </button>
+
+                      <div
+                        style={{
+                          height: 1,
+                          background: "rgba(255,255,255,0.08)",
+                          margin: "6px 0",
+                        }}
+                      />
 
                       {playlists.length === 0 ? (
                         <div style={{ padding: "6px 8px", opacity: 0.75, fontSize: 13 }}>
@@ -219,30 +241,35 @@ export default function Songs() {
                   )}
                 </div>
 
-                {/* like */}
                 <button
                   onClick={async (e) => {
                     e.stopPropagation();
                     try {
-                      if (liked) await unlike(song._id);
-                      else await like(song._id);
+                      if (liked) {
+                        await unlike(song._id);
+                        showToast("Removida das curtidas");
+                      } else {
+                        await like(song._id);
+                        showToast("Adicionada às curtidas 💚");
+                      }
                     } catch {
-                      console.log("Erro ao curtir/descurtir");
+                      showToast("Erro ao curtir");
                     }
                   }}
-                  style={{ background: "transparent", border: "none", cursor: "pointer", fontSize: 18 }}
-                  title={liked ? "Descurtir" : "Curtir"}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: 18,
+                  }}
                 >
                   {liked ? "💚" : "🤍"}
                 </button>
               </div>
 
+              {/* CAPA */}
               <img
-                src={
-                  song.coverUrl?.startsWith("http")
-                    ? song.coverUrl
-                    : `${import.meta.env.VITE_API_URL || "http://localhost:4200"}${song.coverUrl || "/uploads/covers/default.jpg"}`
-                }
+                src={coverOf(song)}
                 alt={song.title}
                 style={{
                   width: "100%",
@@ -252,10 +279,18 @@ export default function Songs() {
                   marginBottom: 10,
                   background: "#333",
                 }}
-                onError={(e) => {
-                  e.currentTarget.src = `${import.meta.env.VITE_API_URL || "http://localhost:4200"}/uploads/covers/default.jpg`;
-                }}
               />
+
+              {/* PLAY HOVER */}
+              <div
+                className="play-overlay"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playTrack(song, filtered);
+                }}
+              >
+                ▶
+              </div>
 
               <div style={{ fontWeight: 700 }}>{song.title}</div>
               <div style={{ fontSize: 13, opacity: 0.75 }}>{song.artist}</div>

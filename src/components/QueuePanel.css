@@ -1,0 +1,183 @@
+.queue-panel {
+  position: fixed;
+  right: 0;
+  bottom: 90px;
+  width: 340px;
+  height: 420px;
+
+  background: #181818;
+  border-left: 1px solid #333;
+
+  padding: 18px;
+  color: white;
+
+  overflow-y: auto;
+
+  box-shadow: -10px 0 30px rgba(0,0,0,0.4);
+
+  animation: queueSlideIn 0.25s ease;
+}
+
+@keyframes queueSlideIn {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.queue-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.queue-close {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.queue-close:hover {
+  color: white;
+}
+
+.queue-section-title {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-bottom: 8px;
+  margin-top: 10px;
+}
+
+.queue-empty {
+  opacity: 0.6;
+  font-size: 13px;
+}
+
+.queue-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 8px;
+  border-radius: 8px;
+
+  transition: background 0.15s ease;
+
+  position: relative;
+}
+
+.queue-item img {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 6px;
+  object-fit: cover;
+
+  background: #333;
+}
+
+.queue-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.queue-title {
+  font-size: 14px;
+  font-weight: 600;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.queue-artist {
+  font-size: 12px;
+  opacity: 0.6;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.queue-item:hover {
+  background: #242424;
+}
+
+.queue-remove {
+  opacity: 0;
+  background: transparent;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 12px;
+
+  transition: opacity 0.15s ease;
+}
+
+.queue-item:hover .queue-remove {
+  opacity: 1;
+}
+
+.queue-playing-icon {
+  font-size: 12px;
+}
+
+.queue-item.playing {
+  background: #2a2a2a;
+}
+
+/* ---------- DRAG SYSTEM ---------- */
+
+.queue-item.draggable {
+  cursor: grab;
+}
+
+.queue-item.draggable:active {
+  cursor: grabbing;
+}
+
+.queue-drag-handle {
+  font-size: 14px;
+  opacity: 0.45;
+  cursor: grab;
+  user-select: none;
+}
+
+.queue-drag-handle:hover {
+  opacity: 1;
+}
+
+.queue-item.dragging {
+  opacity: 0.45;
+}
+
+.queue-item.drag-over {
+  position: relative;
+}
+
+.queue-item.drag-over::before {
+  content: "";
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: -2px;
+
+  height: 2px;
+
+  background: #1db954;
+
+  border-radius: 2px;
+}

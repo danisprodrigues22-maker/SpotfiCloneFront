@@ -1,9 +1,36 @@
 /* ---------- Layout base ---------- */
 .app-layout {
+  position: relative;
   display: flex;
   height: 100vh;
-  background: #121212;
   color: #fff;
+  overflow: hidden;
+  isolation: isolate;
+  background: #121212;
+}
+
+/* Camadas de background para crossfade */
+.app-layout-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 700ms ease;
+  will-change: opacity;
+  z-index: 0;
+}
+
+.app-layout-bg.is-visible {
+  opacity: 1;
+}
+
+/* Conteúdo real acima do background */
+.app-layout-shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  min-width: 0;
 }
 
 /* Conteúdo à direita (Topbar + páginas + Player fixo) */
@@ -11,7 +38,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0; /* evita overflow horizontal em grids */
+  min-width: 0;
 }
 
 /* ---------- Área de páginas ---------- */
@@ -19,12 +46,11 @@
   flex: 1;
   padding: 24px;
   overflow: auto;
-  padding-bottom: 120px; /* espaço seguro pro player fixo */
+  padding-bottom: 120px;
   min-width: 0;
 
-  /* sensação mais “Spotify” */
-  background: radial-gradient(1200px 600px at 20% 0%, rgba(255, 255, 255, 0.06), transparent 60%),
-              radial-gradient(900px 500px at 80% 0%, rgba(255, 255, 255, 0.04), transparent 55%);
+  /* mantém o conteúdo levemente translúcido pro gradiente aparecer com elegância */
+  background: transparent;
 }
 
 /* Scrollbar discreta (Chrome/Edge) */
@@ -52,7 +78,7 @@
 .player {
   position: fixed;
   bottom: 0;
-  left: 220px; /* largura da sidebar */
+  left: 220px;
   right: 0;
 
   background: rgba(24, 24, 24, 0.92);
@@ -66,7 +92,7 @@
   z-index: 100;
 }
 
-/* Botões do player com aparência mais limpa */
+/* Botões do player */
 .player button {
   background: #2a2a2a;
   border: 1px solid rgba(255, 255, 255, 0.10);
@@ -82,9 +108,9 @@
   transform: scale(0.98);
 }
 
-/* Range (progresso/volume) um pouco mais bonito */
+/* Range */
 .player input[type="range"] {
-  accent-color: #1db954; /* verdinho Spotify */
+  accent-color: #1db954;
 }
 
 /* ---------- Responsivo ---------- */
@@ -95,6 +121,53 @@
   }
 
   .player {
-    left: 0; /* no mobile, sidebar geralmente vira drawer */
+    left: 0;
   }
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+.play-overlay {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+  background: #1db954;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  color: black;
+
+  opacity: 0;
+  transform: translateY(6px);
+
+  transition: all 0.2s ease;
+}
+
+.card-hover:hover .play-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.player-cover {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.cover-change {
+  transform: scale(1.05);
+  opacity: 0.7;
 }

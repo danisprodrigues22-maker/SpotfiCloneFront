@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
+import EmptyState from "../components/EmptyState";
 import { PlayerContext } from "../contexts/PlayerContext";
 import { LikesContext } from "../contexts/LikesContext";
 
@@ -26,19 +27,34 @@ export default function Playlist() {
   );
 
   async function fetchPlaylist() {
-    try {
-      const { data } = await api.get(`/playlists/${id}`);
-      setPlaylist(data);
+  try {
+    const { data } = await api.get(`/playlists/${id}`);
+    setPlaylist(data);
 
-      // prepara campos de edição
-      setEditName(data?.name || "");
-      setEditDescription(data?.description || "");
-    } catch (e) {
-      console.log("Erro ao carregar playlist", e?.response?.data || e?.message);
-    } finally {
-      setLoading(false);
+    // prepara campos de edição
+    setEditName(data?.name || "");
+    setEditDescription(data?.description || "");
+  } catch (e) {
+    const status = e?.response?.status;
+
+    if (status === 401) {
+      // o interceptor do axios já te manda pro login,
+      // mas deixo por segurança caso algo mude
+      navigate("/login", { replace: true });
+      return;
     }
+
+    if (status === 403) {
+      alert("Você não tem permissão para acessar essa playlist.");
+      navigate("/app/playlists", { replace: true });
+      return;
+    }
+
+    console.log("Erro ao carregar playlist", e?.response?.data || e?.message);
+  } finally {
+    setLoading(false);
   }
+}
 
   useEffect(() => {
     fetchPlaylist();
@@ -57,9 +73,14 @@ export default function Playlist() {
   }
 
   function coverOf(song) {
-    const url = song?.coverUrl || "/uploads/covers/default.jpg";
-    return url.startsWith("http") ? url : `${baseHost}${url}`;
+  const url = song?.coverUrl || "/uploads/covers/default.jpg";
+
+  if (url.startsWith("http")) {
+    return `${baseHost}/covers/proxy?url=${encodeURIComponent(url)}`;
   }
+
+  return `${baseHost}${url}`;
+}
 
   async function handleRemoveSong(songId) {
     try {
@@ -269,8 +290,11 @@ export default function Playlist() {
 
       {/* Lista */}
       {songs.length === 0 ? (
-        <p style={{ opacity: 0.8 }}>Essa playlist ainda não tem músicas.</p>
-      ) : (
+<EmptyState
+  icon="🎵"
+  title="Playlist vazia"
+  description="Adicione músicas para começar a curtir."
+/>      ) : (
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
           <div
             style={{

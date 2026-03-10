@@ -22,20 +22,18 @@ export default function Playlists() {
   }, []);
 
   async function fetchPlaylists() {
-    try {
-      const { data } = await api.get("/playlists");
-      const list = Array.isArray(data) ? data : (data.playlists || []);
+  try {
+    const { data } = await api.get("/playlists/me");
 
-      // ✅ mostra só as playlists do usuário logado (se possível)
-      const onlyMine = me?._id ? list.filter((p) => p.owner?._id === me._id) : list;
-
-      setPlaylists(onlyMine);
-    } catch (e) {
-      console.log("Erro ao carregar playlists", e?.response?.data || e?.message);
-    } finally {
-      setLoading(false);
-    }
+    // agora o back já retorna só as suas playlists
+    const list = Array.isArray(data) ? data : (data.playlists || []);
+    setPlaylists(list);
+  } catch (e) {
+    console.log("Erro ao carregar playlists", e?.response?.data || e?.message);
+  } finally {
+    setLoading(false);
   }
+}
 
   useEffect(() => {
     fetchPlaylists();

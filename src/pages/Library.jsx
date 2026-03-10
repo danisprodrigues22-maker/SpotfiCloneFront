@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import EmptyState from "../components/EmptyState";
 import { PlayerContext } from "../contexts/PlayerContext";
 
 export default function Library() {
@@ -24,7 +25,7 @@ export default function Library() {
     try {
       const [likedRes, playlistsRes] = await Promise.all([
         api.get("/playlists/me/liked"),
-        api.get("/playlists"),
+        api.get("/playlists/me"),
       ]);
 
       setLikedPlaylist(likedRes.data);
@@ -144,8 +145,13 @@ export default function Library() {
       </div>
 
       {myPlaylists.length === 0 ? (
-        <p style={{ opacity: 0.8 }}>Você ainda não criou playlists.</p>
-      ) : (
+<EmptyState
+  icon="🎶"
+  title="Sua biblioteca está vazia"
+  description="Crie playlists ou curta músicas para começar."
+  actionLabel="Criar playlist"
+  onAction={() => navigate("/app/playlists")}
+/>      ) : (
         <div
           style={{
             display: "grid",
